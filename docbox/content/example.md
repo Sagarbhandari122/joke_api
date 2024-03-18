@@ -1,4 +1,4 @@
-This is our high-quality Jokes API. You can use this API to request
+This is our high-quality Jokes API. You can use this API to request, add 
 and remove different jokes.
 
 ### Retrive a Random joke
@@ -12,17 +12,16 @@ GET /jokes/random
 #### Example request
 
 ```curl
-$ curl http://localhost:5000/jokes/random
+$ curl http://localhost:3000/jokes/random
 ```
 #### Example response
 
 ```json
 {
-    "category_id": 5,
-    "dislikes": 0,
-    "id": 6,
-    "joke_text": "Why did the biology teacher go to jail? Because she stole the cell's nucleus!",
-    "likes": 0
+    "id": 5,
+    "text": "Why did the manager go to therapy? To work on their control issues.",
+    "likes": 0,
+    "dislikes": 0
 }
 ```
 
@@ -37,18 +36,17 @@ GET /jokes/random/:category
 #### Example request
 
 ```curl
-curl http://localhost:5000/jokes/random/Dad Jokes
+curl http://localhost:3000/jokes/random/Science jokes
 ```
 
 #### Example response
 
 ```json
 {
-    "category_id": 1,
-    "dislikes": 0,
-    "id": 2,
-    "joke_text": "Want to hear a joke about construction? I'm still working on it.",
-    "likes": 0
+    "id": 3,
+    "text": "Why was the math book sad? Because it had too many problems.",
+    "likes": 6,
+    "dislikes": 2
 }
 ```
 
@@ -63,32 +61,24 @@ GET /categories
 #### Example request
 
 ```curl
-curl http://localhost:5000/categories
+curl http://localhost:3000/categories
 ```
 
 #### Example response
 
 ```json
-    [
+[
     {
         "id": 1,
-        "name": "Dad Jokes"
+        "name": "Programming jokes"
     },
     {
         "id": 2,
-        "name": "Humour Jokes"
+        "name": "Science jokes"
     },
     {
         "id": 3,
-        "name": "One Liner Jokes"
-    },
-    {
-        "id": 4,
-        "name": "Programming "
-    },
-    {
-        "id": 5,
-        "name": "Science Joke"
+        "name": "Management Jokes"
     }
 ]
 ```
@@ -103,7 +93,7 @@ GET /jokes/:category
 #### Example request
 
 ```curl
-curl http://localhost:5000/jokes/Dad Jokes
+curl http://localhost:3000/jokes/Programming jokes
 ```
 
 #### Example response
@@ -111,25 +101,16 @@ curl http://localhost:5000/jokes/Dad Jokes
 ```json
     [
     {
-        "category_id": 1,
-        "dislikes": 0,
         "id": 1,
-        "joke_text": "Why don't skeletons fight each other? They don't have the guts.",
-        "likes": 0
+        "text": "Why did the programmer quit his job? Because he didn't get arrays",
+        "likes": 0,
+        "dislikes": 0
     },
     {
-        "category_id": 1,
-        "dislikes": 0,
         "id": 2,
-        "joke_text": "Want to hear a joke about construction? I'm still working on it.",
-        "likes": 0
-    },
-    {
-        "category_id": 1,
-        "dislikes": 3,
-        "id": 12,
-        "joke_text": "I'm reading a book on anti-gravity. It's impossible to put down!",
-        "likes": 5
+        "text": "Why do Java developers wear glasses? Because they can't C#",
+        "likes": 0,
+        "dislikes": 0
     }
 ]
 ```
@@ -142,21 +123,20 @@ Retrive a joke by ID
 GET /joke/:id
 ```
 
-#### Example request
+#### Example request joke by ID
 
 ```curl
-curl http://localhost:5000/jokes/5
+curl http://localhost:3000/joke/1
 ```
 
 #### Example response
 
 ```json
 {
-    "category_id": 5,
-    "dislikes": 0,
-    "id": 5,
-    "joke_text": "How does a scientist freshen their breath? With experi-mints!",
-    "likes": 0
+    "id": 1,
+    "text": "Why did the programmer quit his job? Because he didn't get arrays",
+    "likes": 0,
+    "dislikes": 0
 }
 ```
 
@@ -171,14 +151,15 @@ POST /categories
 #### Example request
 
 ```curl
-curl -X POST -H "Content-Type: application/json" -d "{ \"name\": \"Management\" }" http://localhost:5000/categories
+curl -X POST -H "Content-Type: application/json" -d "{ \"name\": \"Dad_jokes\" }" http://localhost:3000/api/categories
+
 ```
 
 #### Example request body
 
 ```json
 {
-    "name": "Management"
+    "name": "Dad_jokes"
 }
 ```
 
@@ -200,15 +181,16 @@ POST /jokes/:category
 #### Example request
 
 ```curl
-curl -X POST -H "Content-Type: application/json" -d "{ \"category\":\"Management\" ,\"joke_text\": \"Management is always a joke.\" }" http://localhost:5000/jokes/Management
+curl -X POST -H "Content-Type: application/json" -d "{ \"text\": \"Your Joke.\" }" http://localhost:3000/jokes/Dad_jokes
+
 ```
 
 #### Example request body
 
 ```json
 {
-    "category": "Mangement",
-    "joke_text": "Management is always a joke."
+    "category": "Dad_jokes",
+    "joke_text": "Your Joke"
 }
 ```
 
@@ -232,14 +214,15 @@ POST /joke/:id/category/:category
 #### Example request
 
 ```curl
-curl -X POST http://localhost:5000/joke/2/category/Management
+curl -X POST http://localhost:3000/jokes/1/categories/Dad_jokes
+
 ```
 #### Example request body
 
 ```json
 {
-    "id":2,
-    "category": "Management"
+    "id":1,
+    "category": "Dad_jokes"
     
 }
 ```
@@ -264,12 +247,25 @@ POST /joke/:id/:type
 #### Example request for Like
 
 ```curl
-curl -X POST http://localhost:5000/joke/5/like
+curl -X POST -H "Content-Type: application/json" -d "{ \"type\": \"like\" }" http://localhost:3000/api/jokes/5/vote
 ```
 #### Example response for like
 
 ```json
 {
-  "message": "Vote recorded successfully for like"
+  "message": "Successfully voted like for joke 5"
+}
+```
+#### Example request for dislike
+
+```curl
+curl -X POST -H "Content-Type: application/json" -d "{ \"type\": \"dislike\" }" http://localhost:3
+000/api/jokes/9/vote
+```
+#### Example response for dislike
+
+```json
+{
+  "message": "Successfully voted disike for joke 9"
 }
 ```
